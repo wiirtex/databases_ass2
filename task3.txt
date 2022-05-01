@@ -1,0 +1,89 @@
+1st query:
+
+create or replace function next_free_id () returns int
+    language plpgsql
+as  $$
+    declare a int;
+        begin
+        a = (SELECT u1.id + 1
+        FROM u u1
+        WHERE NOT EXISTS (
+            SELECT *
+            FROM u u2
+            WHERE u2.id = u1.id + 1
+        )
+        LIMIT 1);
+        if a IS NULL then return 0;
+        end if;
+        return a;
+        end;
+    $$
+;
+
+
+2nd query:
+
+create or replace procedure insert_sample_data ()
+language plpgsql
+as  $$
+        begin
+            insert into u (id, mac_add, ip, country, last_access) values
+                                                                         (next_free_id(), mac(), ip(), random_country(), '1970-01-01'::date);
+        end;
+    $$
+;
+
+create or replace function mac () returns macaddr
+    language plpgsql
+as
+    $$
+        begin
+            return format('%s%s:%s%s:%s%s:%s%s:%s%s:%s%s',to_hex(floor(random()*16)::int), to_hex(floor(random()*16)::int),to_hex(floor(random()*16)::int), to_hex(floor(random()*16)::int),to_hex(floor(random()*16)::int), to_hex(floor(random()*16)::int),to_hex(floor(random()*16)::int), to_hex(floor(random()*16)::int),to_hex(floor(random()*16)::int), to_hex(floor(random()*16)::int),to_hex(floor(random()*16)::int), to_hex(floor(random()*16)::int))::macaddr;
+        end;
+    $$
+;
+
+create or replace function  ip () returns inet
+    language plpgsql
+as
+    $$
+        begin
+            return (array_to_string((select array_agg(round(random()* 256)::int)
+            from generate_series(1, 4)), '.')::inet);
+        end;
+    $$
+;
+
+
+create or replace function random_country () returns text
+language plpgsql
+as  $$
+        begin
+            return (select Array['russia', 'usa', 'england', 'france', 'ukraine'])[ceil(random()*5)];
+        end;
+    $$
+;
+
+
+3rd query:
+
+create or replace function ip_to_bin (ip inet) returns text
+language plpgsql
+as  $$
+        begin
+            return (SELECT (ip - '0.0.0.0'::inet)::int)::bit(32)::text;
+        end;
+    $$
+;
+
+
+4th query:
+
+create or replace function ip_from_country_to_bin (country_ text) returns TABLE (ip text)
+language plpgsql
+as  $$
+        begin
+            return query SELECT ip_to_bin(u.ip::inet) from u where u.country = country_;
+        end;
+    $$
+;

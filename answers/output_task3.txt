@@ -1,0 +1,71 @@
+-- you can see my sample db (inserts) in the end of the file 
+
+--1 
+
+-- on my generated table:
+
+-- select next_free_id();
+
+#	next_free_id
+1	22
+
+
+
+--2
+
+-- no output
+
+
+
+
+--3 
+
+-- select ip_to_bin('140.174.238.101'::inet);
+
+#	ip_to_bin
+1	10001100101011101110111001100101
+
+
+
+
+--4 
+
+-- on my generated data:
+
+-- select ip_from_country_to_bin('usa');
+
+#	ip_from_country_to_bin
+1	10001100101011101110111001100101
+2	00101100110100100111011011011011
+3	11111111000001001011000111100000
+4	00100100001111111000011001101011
+
+
+
+
+--my generated data:
+
+-- select * from u;
+
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (0, '87:f2:2c:b4:f6:ad', '66.107.27.113', 'Nigeria', '1983-03-28');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (1, '9d:4b:98:5d:30:dc', '135.73.51.243', 'Mongolia', '1977-01-31');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (2, '83:7a:11:b3:42:dc', '203.141.139.63', 'Martinique', '1976-09-04');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (3, 'f1:48:88:05:a4:0f', '129.71.99.155', 'Ireland', '1997-05-08');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (4, 'a5:ba:29:8b:8e:47', '8.223.173.125', 'Grenada', '1975-03-07');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (5, '01:2b:6c:7f:08:17', '185.240.13.20', 'Kyrgyz Republic', '1979-03-26');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (6, 'f0:c9:5b:9e:d2:8d', '43.241.183.235', 'Belgium', '2010-06-22');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (7, 'f0:f6:36:e5:b7:f4', '167.106.203.66', 'Antigua and Barbuda', '1986-01-23');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (8, '3f:5f:ff:74:e8:44', '49.130.232.81', 'Kyrgyz Republic', '2022-04-11');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (9, '9d:9d:d8:75:c0:92', '99.32.8.250', 'Mozambique', '1983-05-26');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (10, '17:20:f7:bc:19:51', '176.144.99.177', 'country', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (12, '73:22:89:ac:f6:1a', '74.129.62.101', 'russia', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (13, '0c:2d:93:eb:90:78', '140.174.238.101', 'usa', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (14, '5f:aa:3c:92:9b:30', '44.210.118.219', 'usa', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (15, 'a0:31:da:fd:f3:d9', '183.122.254.207', 'ukraine', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (16, '22:db:0b:5b:1c:80', '192.253.229.147', 'england', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (17, '3b:28:26:84:28:c0', '82.254.102.44', 'france', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (18, 'a7:5f:16:31:a0:04', '203.226.92.87', 'england', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (11, 'd8:45:df:8a:f2:c8', '255.4.177.224', 'usa', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (19, 'aa:2e:41:95:19:de', '36.63.134.107', 'usa', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (20, 'fa:fa:97:87:d4:a3', '252.105.180.244', 'russia', '1970-01-01');
+INSERT INTO public.u (id, mac_add, ip, country, last_access) VALUES (21, 'ea:c6:1e:6f:b1:c3', '1.12.201.208', 'france', '1970-01-01');

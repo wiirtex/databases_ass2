@@ -1,0 +1,83 @@
+# ! code of generating data is in end of the file !
+
+# outputs of the queries in the another files (output_t1.txt and output_t2.txt)
+
+Queries: 
+# Select all products purchased by the customer with discount
+
+select customer.name as Name, products.name as \"Product Name\", sales.type from sales join products on sales.type = products.type join purchases_products_list p on products.id = p.product_id join purchases on p.purchase_id = purchases.id join customer on  purchases.customer_id = customer.id
+    order by customer.name, sales.type;
+
+# Find the total saved money for each customer
+
+select customer.name, sum(products.price::int) - sum(products.price::int * (100 - sales.discount)/100) as \"Saved Money\" from sales join products on sales.type = products.type join purchases_products_list p on products.id = p.product_id join purchases on p.purchase_id = purchases.id join customer on  purchases.customer_id = customer.id \
+    group by customer.name
+
+# creating indexes
+
+create index a on products(type);
+create index b on sales(type);
+
+
+
+
+
+
+
+import sys
+import time 
+
+import pg8000.native
+import psycopg2
+from faker import Faker
+
+try:
+    con = psycopg2.connect(database="postgres", user="postgres", password="1", host="127.0.0.1", port="5432")
+    cur = con.cursor()
+    print("Cool!", con.closed)
+except BaseException as be:
+    print("Impossible to connect to db:", be)
+    sys.exit(1)
+
+# create tables
+cur.execute("drop table if exists purchases;")
+cur.execute("drop table if exists purchases_products_list;")
+cur.execute("drop table if exists products;")
+cur.execute("drop table if exists sales;")
+cur.execute("drop table if exists customer;")
+cur.execute("create table if not exists customer (id integer primary key, name text, address text, review text)")
+cur.execute("create table if not exists purchases (id integer primary key, customer_id int, constraint a foreign key (customer_id) references customer(id)); ")
+cur.execute("create table if not exists products (id integer primary key, name text, details text, price int, type text)")
+cur.execute("create table if not exists purchases_products_list (id integer primary key, purchase_id int, product_id int, constraint b foreign key (purchase_id) references purchases(id), constraint c foreign key (product_id) references products(id))")
+cur.execute("create table if not exists sales (id integer primary key, type text, discount int)")
+con.commit()
+
+#generating values
+import random
+fake = Faker()
+
+try: 
+    cur.execute("delete from purchases_products_list; \
+    delete from purchases; \
+    delete from products; \
+    delete from sales; \
+    delete from customer;")
+    for i in range(101):
+        cur.execute(f"insert into customer (id, name, address, review) values ('{str(i)}', '{fake.name()}', '{fake.address()}', '{fake.text()}');")
+    for i in range(301):
+        cur.execute(f"insert into purchases (id, customer_id) values ('{str(i)}', {random.randint(0, 100)});")
+    types = fake.words(20)
+    for i in range(301):
+        cur.execute(f"insert into products (id, name, details, price, type) values ('{str(i)}', '{fake.text(25)}', '{fake.text(50)}', {random.randint(0, 1000)}, '{types[random.randint(0, len(types)-1)]}');")
+    for i in range(3000):
+        cur.execute(f"insert into purchases_products_list (id, purchase_id, product_id) values ('{str(i)}', {random.randint(0, 300)}, {random.randint(0, 300)});")
+    for i in range(10):
+        cur.execute(f"insert into sales (id, type, discount) values ({str(i)}, '{types[random.randint(0, len(types) // 3)]}', {random.randint(0,30)});")
+    con.commit()
+except BaseException as e: 
+    print("Error!", e)
+    con.reset()
+
+
+
+
